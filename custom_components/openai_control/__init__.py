@@ -45,7 +45,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up OpenAI Agent from a config entry."""
     hass.data.setdefault(CONF_HOST, "https://api.openai.com/v1/")
     openai.api_key = entry.data[CONF_API_KEY]
-    openai.host = data[CONF_HOST]
+    openai.base_url = data[CONF_HOST]
 
     try:
         await hass.async_add_executor_job(
@@ -64,7 +64,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload OpenAI Agent."""
     openai.api_key = None
-    openai.host = None
+    openai.base_url = None
     conversation.async_unset_agent(hass, entry)
     return True
 

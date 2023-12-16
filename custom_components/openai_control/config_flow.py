@@ -62,7 +62,7 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> None:
     Data has the keys from STEP_USER_DATA_SCHEMA with values provided by the user.
     """
     openai.api_key = data[CONF_API_KEY]
-    openai.api_base = data[CONF_HOST]
+    openai.base_url = data[CONF_HOST]
     await hass.async_add_executor_job(partial(openai.Engine.list, request_timeout=10))
 
 
