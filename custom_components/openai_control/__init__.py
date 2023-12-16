@@ -15,7 +15,7 @@ from openai import error
 
 from homeassistant.components import conversation
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_API_KEY, MATCH_ALL
+from homeassistant.const import CONF_API_KEY, CONF_HOST, MATCH_ALL
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady, TemplateError
 from homeassistant.helpers import intent, template, entity_registry
@@ -43,7 +43,9 @@ prompt_template = Template(PROMPT_TEMPLATE)
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up OpenAI Agent from a config entry."""
+    hass.data.setdefault(CONF_HOST, "https://api.openai.com/v1/")
     openai.api_key = entry.data[CONF_API_KEY]
+    openai.host = data[CONF_HOST]
 
     try:
         await hass.async_add_executor_job(
@@ -62,6 +64,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload OpenAI Agent."""
     openai.api_key = None
+    openai.host = None
     conversation.async_unset_agent(hass, entry)
     return True
 
